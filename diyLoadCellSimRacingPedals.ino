@@ -16,11 +16,11 @@ float rawBrake = 0;
 // Create conversion variables
 // Line joining (a,0) to (b, 1023) with gradient m=1023/(b-a) and c=-ma
 const float minRawThrottle = 10;
-const float maxRawThrottle = 200000;
+const float maxRawThrottle = 1200000;
 const float mThrottle = 1023/(maxRawThrottle - minRawThrottle);
 const float cThrottle = - mThrottle * minRawThrottle;
 const float minRawBrake = 0;
-const float maxRawBrake = 300000;
+const float maxRawBrake = 600000;
 const float mBrake = 1023/(maxRawBrake - minRawBrake);
 const float cBrake = - mBrake * minRawBrake;
 // Create output variables
@@ -28,7 +28,7 @@ float adjThrottle = 0;
 float adjBrake = 0;
 
 // Create Joystick
-Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID,
+Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID + 1, // Don't use first joystick ID, as this is taken by the steering wheel device.
   JOYSTICK_TYPE_MULTI_AXIS, 0, 0,             // Button Counts
   false, false, false, false, false, false,   // Axes Includes
   false, true, false, true, false);           // Rudder, throttle, accelerator, brake, steering
