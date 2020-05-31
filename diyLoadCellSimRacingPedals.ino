@@ -19,11 +19,11 @@ float rawThrottle = 0;
 float rawBrake = 0;
 // Create conversion variables
 // Line joining (a,0) to (b, 1023) with gradient m=1023/(b-a) and c=-ma
-const float minRawThrottle = 10;
-const float maxRawThrottle = 1200000;
+const float minRawThrottle = 30000;
+const float maxRawThrottle = 1000000;
 const float mThrottle = 1023/(maxRawThrottle - minRawThrottle);
 const float cThrottle = - mThrottle * minRawThrottle;
-const float minRawBrake = 0;
+const float minRawBrake = 15000;
 const float maxRawBrake = 800000;
 const float mBrake = 1023/(maxRawBrake - minRawBrake);
 const float cBrake = - mBrake * minRawBrake;
@@ -41,7 +41,9 @@ Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID + 1, // Don't use first joystick I
 const bool testAutoSendMode = true;
 
 // Plotting - Comment line(s) to disable plotting and/or timer counter
-//#define PLOT;
+//#define PLOT_RAW;
+//#define PLOT_ADJ;
+#define PLOT_PER;
 //#define TIMER_COUNTER;
 
 // Loop Timer
@@ -52,7 +54,7 @@ long loops = 0;
 
 void setup() {
   // Begin connection
-  #ifdef PLOT || TIMER_COUNTER
+  #ifdef PLOT_RAW || PLOT_ADJ || PLOT_PER || TIMER_COUNTER
     Serial.begin(9600);
   #endif
 
@@ -94,11 +96,32 @@ void loop() {
 
   /* ------------------ Debugging ----------------- */
   // Print to plotter
-  #ifdef PLOT
+  // Raw Load Cell Values
+  #ifdef PLOT_RAW
+    Serial.print(rawThrottle, 1);
+    Serial.print(", ");
+    Serial.println(rawBrake, 1);
+  #endif
+  // Adjusted values
+  #ifdef PLOT_ADJ
     Serial.print(adjThrottle, 1);
     Serial.print(", ");
     Serial.println(adjBrake, 1);
   #endif
+  // Percentage Values
+  #ifdef PLOT_PER
+    if (adjThrottle > 0) {
+      Serial.print(100.0*adjThrottle/1024.);  
+    } else {
+      Serial.print(0.0);
+    }
+    Serial.print(", ");
+    if (adjBrake > 0) {
+      Serial.println(100.0*adjBrake/1024.);
+    } else {
+      Serial.println(0.0);
+    }
+  #endif 
 
   // Timer counter
   #ifdef TIMER_COUNTER
