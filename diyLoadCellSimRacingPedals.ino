@@ -1,3 +1,7 @@
+#if 1
+__asm volatile ("nop");
+#endif
+
 #include "HX711.h"
 #include "Joystick.h"
 
@@ -20,7 +24,7 @@ const float maxRawThrottle = 1200000;
 const float mThrottle = 1023/(maxRawThrottle - minRawThrottle);
 const float cThrottle = - mThrottle * minRawThrottle;
 const float minRawBrake = 0;
-const float maxRawBrake = 600000;
+const float maxRawBrake = 800000;
 const float mBrake = 1023/(maxRawBrake - minRawBrake);
 const float cBrake = - mBrake * minRawBrake;
 // Create output variables
@@ -36,9 +40,9 @@ Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID + 1, // Don't use first joystick I
 // Set auto send mode on joystick
 const bool testAutoSendMode = true;
 
-// Plotting
-bool plot = true;
-bool timerCounter = false;
+// Plotting - Comment line(s) to disable plotting and/or timer counter
+//#define PLOT;
+//#define TIMER_COUNTER;
 
 // Loop Timer
 long lastMillis = 0;
@@ -48,7 +52,9 @@ long loops = 0;
 
 void setup() {
   // Begin connection
-  Serial.begin(9600);
+  #ifdef PLOT || TIMER_COUNTER
+    Serial.begin(9600);
+  #endif
 
   // Setup first HX711
   throttleScale.begin(DOUT, CLK);
@@ -88,14 +94,14 @@ void loop() {
 
   /* ------------------ Debugging ----------------- */
   // Print to plotter
-  if (plot) {
+  #ifdef PLOT
     Serial.print(adjThrottle, 1);
     Serial.print(", ");
     Serial.println(adjBrake, 1);
-  }
+  #endif
 
   // Timer counter
-  if (timerCounter) {
+  #ifdef TIMER_COUNTER
     long currMillis = millis();
     loops++;
 
@@ -106,6 +112,6 @@ void loop() {
       lastMillis = currMillis;
       loops = 0;
     } 
-  } 
+  #endif
 
 }
