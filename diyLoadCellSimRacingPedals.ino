@@ -43,7 +43,7 @@ const bool testAutoSendMode = true;
 // Plotting - Comment line(s) to disable plotting and/or timer counter
 //#define PLOT_RAW;
 //#define PLOT_ADJ;
-#define PLOT_PER;
+//#define PLOT_PER;
 //#define TIMER_COUNTER;
 
 // Loop Timer
@@ -111,13 +111,13 @@ void loop() {
   // Percentage Values
   #ifdef PLOT_PER
     if (adjThrottle > 0) {
-      Serial.print(100.0*adjThrottle/1024.);  
+      Serial.print(100.0*adjThrottle/1023.);  
     } else {
       Serial.print(0.0);
     }
     Serial.print(", ");
     if (adjBrake > 0) {
-      Serial.println(100.0*adjBrake/1024.);
+      Serial.println(100.0*adjBrake/1023.);
     } else {
       Serial.println(0.0);
     }
