@@ -20,7 +20,7 @@ float rawBrake = 0;
 // Create conversion variables
 // Line joining (a,0) to (b, 1023) with gradient m=1023/(b-a) and c=-ma
 const float minRawThrottle = 30000;
-const float maxRawThrottle = 1000000;
+const float maxRawThrottle = 0.94*1000000;
 const float mThrottle = 1023/(maxRawThrottle - minRawThrottle);
 const float cThrottle = - mThrottle * minRawThrottle;
 const float minRawBrake = 15000;
