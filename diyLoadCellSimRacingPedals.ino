@@ -53,6 +53,10 @@ long loops = 0;
 
 
 void setup() {
+  // Set Inbuilt LED High During Calibration
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);
+  
   // Begin connection
   #ifdef PLOT_RAW || PLOT_ADJ || PLOT_PER || TIMER_COUNTER
     Serial.begin(9600);
@@ -76,6 +80,9 @@ void setup() {
 
   // Start joystick connection
   Joystick.begin(testAutoSendMode);
+
+  // Calibration finished, turn off LED
+  digitalWrite(LED_BUILTIN, LOW);
 
 }
 
